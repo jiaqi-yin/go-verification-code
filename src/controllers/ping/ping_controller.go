@@ -6,6 +6,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Ping(c *gin.Context) {
+var (
+	PingController pingControllerInterface = &pingController{}
+)
+
+type pingControllerInterface interface {
+	Ping(*gin.Context)
+}
+
+type pingController struct{}
+
+func (controller *pingController) Ping(c *gin.Context) {
 	c.String(http.StatusOK, "pong")
 }
