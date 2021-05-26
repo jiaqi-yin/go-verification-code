@@ -2,6 +2,8 @@
 
 This is a microservice to generate and verify a 6 digit verification code. It can be applied in the common verification use case.
 
+![Flow chart](https://raw.githubusercontent.com/jiaqi-yin/go-verification-code/master/flow.png)
+
 Basic use cases
 
   - The verification code is generated as per mobile number and will expire in 2 minutes.
