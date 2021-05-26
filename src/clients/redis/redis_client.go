@@ -2,9 +2,15 @@ package redis
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/go-redis/redis/v8"
+)
+
+const (
+	redisHost = "redis"
+	redisPort = "6379"
 )
 
 var (
@@ -44,7 +50,7 @@ func (c *redisClient) Incr(key string) (int64, error) {
 func Init() {
 	ctx := context.Background()
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     fmt.Sprintf("%s:%s", redisHost, redisPort),
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
