@@ -15,10 +15,17 @@ const (
 	retryLimit     = 3
 )
 
+func getCountKey(phoneNo string) string {
+	return countKeyPrefix + phoneNo
+}
+
+func getCodeKey(phoneNo string) string {
+	return codeKeyPrefix + phoneNo
+}
+
 func (codeGenerator *CodeGenerator) Generate() utils.RestErr {
-	phoneNo := codeGenerator.Phone
-	countKey := countKeyPrefix + phoneNo
-	codeKey := codeKeyPrefix + phoneNo
+	countKey := getCountKey(codeGenerator.Phone)
+	codeKey := getCodeKey(codeGenerator.Phone)
 
 	count, _ := redis.Client.Get(countKey)
 	if count == "" {
@@ -41,7 +48,22 @@ func (codeGenerator *CodeGenerator) Generate() utils.RestErr {
 			redis.Client.Incr(countKey)
 			return nil
 		} else {
-			return utils.NewBadRequestError("You are exceeding the limit. Please try it tomorrow.")
+			return utils.NewBadRequestError("You are exceeding the limit today. Please try it tomorrow.")
+		}
+	}
+}
+
+func (codeVerifier *CodeVerifier) Verify() utils.RestErr {
+	inputCode := codeVerifier.Code
+	codeKey := getCodeKey(codeVerifier.Phone)
+	redisCode, _ := redis.Client.Get(codeKey)
+	if redisCode == "" {
+		return utils.NewBadRequestError("verification code does not exist in redis")
+	} else {
+		if inputCode == redisCode {
+			return nil
+		} else {
+			return utils.NewBadRequestError("verification code does not match")
 		}
 	}
 }

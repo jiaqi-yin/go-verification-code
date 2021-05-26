@@ -37,6 +37,17 @@ func (controller *codeController) Generate(c *gin.Context) {
 }
 
 func (controller *codeController) Verify(c *gin.Context) {
-	isValid := services.CodeService.Verify("123456")
-	c.JSON(http.StatusOK, isValid)
+	var codeVerifier code.CodeVerifier
+	if err := c.ShouldBindJSON(&codeVerifier); err != nil {
+		restErr := utils.NewBadRequestError("invalid json body")
+		c.JSON(restErr.Status(), restErr)
+		return
+	}
+
+	result, err := services.CodeService.Verify(codeVerifier)
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+	c.JSON(http.StatusOK, result)
 }

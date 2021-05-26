@@ -11,7 +11,7 @@ var (
 
 type codeServiceInterface interface {
 	Generate(code.CodeGenerator) (bool, utils.RestErr)
-	Verify(string) bool
+	Verify(code.CodeVerifier) (bool, utils.RestErr)
 }
 
 type codeService struct{}
@@ -28,6 +28,14 @@ func (s *codeService) Generate(codeGenerator code.CodeGenerator) (bool, utils.Re
 	return true, nil
 }
 
-func (s *codeService) Verify(code string) bool {
-	return true
+func (s *codeService) Verify(codeVerifier code.CodeVerifier) (bool, utils.RestErr) {
+	if err := codeVerifier.Validate(); err != nil {
+		return false, err
+	}
+
+	if err := codeVerifier.Verify(); err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
