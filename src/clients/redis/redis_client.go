@@ -6,11 +6,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v8"
-)
-
-const (
-	redisHost = "redis"
-	redisPort = "6379"
+	appconfig "github.com/jiaqi-yin/go-verification-code/src/app_config"
 )
 
 var (
@@ -50,7 +46,7 @@ func (c *redisClient) Incr(key string) (int64, error) {
 func Init() {
 	ctx := context.Background()
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%s", redisHost, redisPort),
+		Addr:     fmt.Sprintf("%s:%s", appconfig.Config.RedisHost, appconfig.Config.RedisPort),
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})

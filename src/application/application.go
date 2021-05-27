@@ -2,6 +2,7 @@ package application
 
 import (
 	"github.com/gin-gonic/gin"
+	appconfig "github.com/jiaqi-yin/go-verification-code/src/app_config"
 	"github.com/jiaqi-yin/go-verification-code/src/clients/redis"
 )
 
@@ -10,9 +11,11 @@ var (
 )
 
 func StartApplication() {
+	appconfig.LoadConfig(".")
+
 	redis.Init()
 
 	mapUrls()
 
-	router.Run(":8080")
+	router.Run(appconfig.Config.ServerAddr)
 }
