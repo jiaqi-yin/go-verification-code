@@ -7,9 +7,11 @@ var (
 )
 
 type config struct {
-	RedisHost  string `mapstructure:"REDIS_HOST"`
-	RedisPort  string `mapstructure:"REDIS_PORT"`
-	ServerAddr string `mapstructure:"SERVER_ADDR"`
+	RedisHost        string `mapstructure:"REDIS_HOST"`
+	RedisPort        string `mapstructure:"REDIS_PORT"`
+	ServerAddr       string `mapstructure:"SERVER_ADDR"`
+	SmsBaseUrl       string `mapstructure:"SMS_BASE_URL"`
+	SmsAuthorization string `mapstructure:"SMS_AUTHORIZATION"`
 }
 
 func LoadConfig(path string) {

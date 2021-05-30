@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jiaqi-yin/go-verification-code/src/clients/sms"
 	"github.com/jiaqi-yin/go-verification-code/src/domain/code"
 	"github.com/jiaqi-yin/go-verification-code/src/services"
 	"github.com/jiaqi-yin/go-verification-code/src/utils"
@@ -28,7 +29,8 @@ func (controller *codeController) Generate(c *gin.Context) {
 		return
 	}
 
-	result, err := services.CodeService.Generate(codeGenerator)
+	smsClient := sms.NewSmsClient()
+	result, err := services.CodeService.Generate(codeGenerator, smsClient)
 	if err != nil {
 		c.JSON(err.Status(), err)
 		return
