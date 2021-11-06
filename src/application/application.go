@@ -15,6 +15,7 @@ func StartApplication() {
 
 	redis.Init()
 
+	enableCors()
 	mapUrls()
 
 	router.Run(appconfig.Config.ServerAddr)
